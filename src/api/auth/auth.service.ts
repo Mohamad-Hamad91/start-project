@@ -9,7 +9,7 @@ export class AuthService {
     constructor(private usersService: UsersService, private jwtService: JwtService) { }
 
     async register(user: RegisterDto) {
-        return await this.usersService.create(user);
+        return this.usersService.create(user);
     }
 
     async validateJWTUser(email: string, pass: string) {

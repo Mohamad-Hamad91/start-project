@@ -6,7 +6,11 @@ import { MyLogger } from './my-logger';
 
 @Module({
     imports: [MailModule],
-    providers: [MyLogger, MailService, ErrorsInterceptor],
-    exports: [MyLogger, ErrorsInterceptor]
+    providers: [MyLogger, MailService,
+         ErrorsInterceptor
+        ],
+    exports: [MyLogger, 
+        ErrorsInterceptor
+    ]
 })
 export class LoggerModule { }

@@ -19,7 +19,7 @@ export class UsersService {
             await result.save();
         } catch (e) {
             if (e.code == 11000) {
-                throw new ConflictException('Email already exists');
+                throw new BadRequestException('Email already exists');
 
             }
         }

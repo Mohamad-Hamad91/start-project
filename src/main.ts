@@ -14,7 +14,7 @@ async function bootstrap() {
   const port = configService.get('PORT');
   const myLogger = app.get(MyLogger);
   app.useLogger(myLogger);
-  // app.useGlobalInterceptors(app.get(ErrorsInterceptor));
+  app.useGlobalInterceptors(app.get(ErrorsInterceptor));
   await app.listen(port);
   myLogger.log(`server started and listening on port: ${port}`);
 }
