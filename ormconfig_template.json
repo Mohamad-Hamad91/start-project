@@ -1,9 +1,7 @@
 {
     "type": "mongodb",
     "url": "mongodb://localhost/pie",
-    "entities": [
-        "dist/**/*.entity{.ts,.js}"
-    ],
+    "entities": ["dist/**/*.entity{.ts,.js}"],
     "synchronize": true,
     "useUnifiedTopology": true,
     "autoLoadEntities": true

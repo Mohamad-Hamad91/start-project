@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
+import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,25 +14,27 @@ export class AuthService {
         return this.usersService.create(user);
     }
 
-    async validateJWTUser(email: string, pass: string) {
+    async validateJWTUser(email: string) {
         const user = await this.usersService.findOne(email);
-        if (user && user.password === pass) {
+        if (!user) throw new UnauthorizedException("");
+        else {
             const { password, ...result } = user;
             return result;
         }
-        return null;
     }
 
-    async login(user: any) {
-        const payload = { email: user.email, sub: user.userId };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
+    async login(data: LoginDto) {
+        const user = await this.validateLocalUser(data.email, data.password);
+        if (!user) throw new UnauthorizedException("");
+
+        const payload = { email: user?.email, sub: user?.id };
+        const accessToken = await this.jwtService.signAsync(payload);
+        return { accessToken };
     }
 
     async validateLocalUser(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findOne(email);
-        if (user && user.password === pass) {
+        if (user && (await bcrypt.compare(pass, user.password))) {
             const { password, ...result } = user;
             return result;
         }

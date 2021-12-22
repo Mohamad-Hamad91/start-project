@@ -2,21 +2,20 @@ import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { createLogger, transports, Logger, format } from 'winston';
 import { formatDate } from '../helpers/format-Date';
 import { colors } from '../constants/cli-colors';
-import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class MyLogger implements LoggerService {
 
     winstonLogger: Logger;
 
-    constructor(private mailSerrvice: MailService) {
+    constructor() {
         this.winstonLogger = createLogger({
             transports: [
                 new transports.File({ filename: 'log/combined.log' }),
             ],
-            exceptionHandlers: [
-                new transports.File({ filename: 'log/exceptions.log' })
-            ],
+            // exceptionHandlers: [
+            //     new transports.File({ filename: 'log/exceptions.log' })
+            // ],
         });
 
     }
@@ -47,7 +46,9 @@ export class MyLogger implements LoggerService {
             `${colors.fg.yellow}${timestamp}`,
             `${colors.fg.red}${message}`,
         );
-        // this.mailSerrvice.sendErrorReport("hello", message);
+        console.log(optionalParams);
+        this.winstonLogger.log('error', optionalParams);
+        
     }
 
     /**

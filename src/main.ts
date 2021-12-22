@@ -7,13 +7,13 @@ import { MyLogger } from './utils/logger/my-logger';
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
-    // logger: new MyLogger();,
-    logger: false
+    logger: new MyLogger(),
+    // logger: false
   });
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
   const myLogger = app.get(MyLogger);
-  app.useLogger(myLogger);
+  // app.useLogger(myLogger);
   app.useGlobalInterceptors(app.get(ErrorsInterceptor));
   await app.listen(port);
   myLogger.log(`server started and listening on port: ${port}`);
