@@ -21,7 +21,22 @@ import { User } from './api/users/entity/user.entity';
     AuthModule,
     ResumeModule,
     SearchModule,
-    TypeOrmModule.forRoot(),// the configuration was taken from the file ormconfig.json at the root directory
+    TypeOrmModule.forRootAsync({
+      useFactory: (config: ConfigService) => ({
+        type: config.get('DB_TYPE'),
+        host: config.get('DB_HOST'),
+        url: config.get('DB_URL'),
+        // port: +config.get<number>('DB_PORT'),
+        // username: config.get('DB_USERNAME'),
+        // password: config.get('DB_PASSWORD'),
+        // database: config.get('DB_NAME'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: config.get('DB_SYNC'),
+        useUnifiedTopology: true,
+      }),
+      inject: [ConfigService],
+    }
+    ),// the configuration was taken from the file ormconfig.json at the root directory
     MailModule,
     LoggerModule,
     ConsoleModule,

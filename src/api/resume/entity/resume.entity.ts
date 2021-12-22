@@ -3,7 +3,7 @@ import { City, Country } from 'src/utils/constants/countries';
 import { Nationality } from 'src/utils/constants/nationalits';
 import { Shift } from 'src/utils/constants/shift';
 import { WorkType } from 'src/utils/constants/workType';
-import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn, Unique } from 'typeorm';
 import { Course } from './course.entity';
 import { Education } from './education.entity';
 import { EmploymentHistory } from './employment-history.entity';
@@ -16,7 +16,10 @@ import { UserSkill } from './user-skill.entity';
 @Entity()
 export class Resume extends BaseEntity {
   @ObjectIdColumn({ generated: true })
-  id: string = '';
+  id: ObjectID;
+
+  @ObjectIdColumn({ nullable: false, unique: true })
+  userId: ObjectID;
 
   @Column()
   email: string = '';

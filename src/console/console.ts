@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { BootstrapConsole } from 'nestjs-console';
 import { AppModule } from 'src/app.module';
 
@@ -14,7 +15,7 @@ bootstrap.init().then(async (app) => {
         process.exit(0);
     } catch (e) {
         app.close();
-
+        (new Logger()).error(e);
         process.exit(1);
     }
 });

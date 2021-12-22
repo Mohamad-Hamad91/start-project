@@ -4,9 +4,11 @@ import {
   IsBoolean,
   IsDate,
   IsEmail,
+  IsHexadecimal,
   IsIn,
   IsNotEmpty,
   IsPhoneNumber,
+  Length,
   MinLength,
   ValidateNested,
 } from 'class-validator';

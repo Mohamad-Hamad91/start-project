@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ObjectID, Repository } from 'typeorm';
+import { User } from '../users/entity/user.entity';
 import { ResumeDto } from './dto/resume.dto';
 import { Resume } from './entity/resume.entity';
 
@@ -18,8 +19,9 @@ export class ResumeService {
     return await this.resumeRepository.findOne(id);
   }
 
-  async create(resume: ResumeDto): Promise<Resume> {
+  async create(resume: ResumeDto, userId: ObjectID): Promise<Resume> {
     const temp = this.resumeRepository.create(resume);
+    temp.userId = userId;
     // because of open issue #1980 in typeORM
     temp.employmentHistory = resume.employmentHistory ?? [];
     temp.courses = resume.courses ?? [];

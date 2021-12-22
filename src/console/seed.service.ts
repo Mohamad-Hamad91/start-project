@@ -1,13 +1,17 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { Console, Command, createSpinner } from 'nestjs-console';
 import { ResumeService } from 'src/api/resume/resume.service';
 import { City, Country } from 'src/utils/constants/countries';
 import { Nationality } from 'src/utils/constants/nationalits';
 import { Shift } from 'src/utils/constants/shift';
 import { WorkType } from 'src/utils/constants/workType';
+import { ObjectID } from 'mongodb';
 
 @Console()
 export class SeedService {
+
+    private logger = new Logger('SeedService');
+
     constructor(@Inject(ResumeService) private usersService: ResumeService,) { }
 
     @Command({
@@ -15,10 +19,12 @@ export class SeedService {
         description: 'Seed DB',
     })
     async seed(): Promise<void> {
+        this.logger.log('Seeds starts...');
         const spin = createSpinner();
-        spin.start('Seeding the DB');
+        spin.start('Seeding the DB...');
+        this.logger.log('Seeding Resumes...');
         await this.seedResume();
-        spin.succeed('Seeding done');
+        spin.succeed('Seeding done.');
     }
 
     async seedResume() {
@@ -48,6 +54,7 @@ export class SeedService {
             references: [],
             languages: [],
             skills: []
-        });
+        }, new ObjectID('61c1d652d3fa6d932bbdef3a')
+        );
     }
 }

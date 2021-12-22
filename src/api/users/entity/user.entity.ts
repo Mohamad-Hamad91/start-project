@@ -1,11 +1,11 @@
-import { BaseEntity, Column, Entity, ObjectIdColumn, Unique } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['email'])
 export class User extends BaseEntity {
 
     @ObjectIdColumn({ generated: true })
-    id: string = '';
+    id: ObjectID;
 
     @Column({ unique: true })
     email: string = '';

@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+import { GetUser } from '../../utils/decorator/get-user.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -24,8 +25,8 @@ export class AuthController {
 
   @Post('/test')
   @UseGuards(AuthGuard())
-  async test(@Req() req) {
-    console.log(req.user);
+  async test(@GetUser() user) {
+    console.log(user);
 
   }
 }

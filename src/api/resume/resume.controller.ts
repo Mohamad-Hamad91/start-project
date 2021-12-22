@@ -5,24 +5,34 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Logger,
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/utils/decorator/get-user.decorator';
+import { User } from '../users/entity/user.entity';
 import { ResumeDto } from './dto/resume.dto';
 import { Resume } from './entity/resume.entity';
 import { ResumeService } from './resume.service';
 
 @Controller('resume')
 @UsePipes(ValidationPipe)
+@UseGuards(AuthGuard())
 export class ResumeController {
-  constructor(private resumeService: ResumeService) {}
+
+  private logger = new Logger('ResumeController');
+
+  constructor(private resumeService: ResumeService) { }
 
   @Get()
   get() {
     // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    this.logger.verbose('getting resumes!');
     return this.resumeService.get();
   }
 
@@ -33,8 +43,8 @@ export class ResumeController {
   }
 
   @Post()
-  create(@Body() resume: ResumeDto): Promise<Resume> {
-    return this.resumeService.create(resume);
+  create(@GetUser() user, @Body() resume: ResumeDto): Promise<Resume> {
+    return this.resumeService.create(resume, user.id);
   }
 
   @Put('/:id')

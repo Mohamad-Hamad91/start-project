@@ -1,5 +1,6 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { createLogger, transports, Logger, format } from 'winston';
+import 'winston-daily-rotate-file';
 import { formatDate } from '../helpers/format-Date';
 import { colors } from '../constants/cli-colors';
 
@@ -9,10 +10,16 @@ export class MyLogger implements LoggerService {
     winstonLogger: Logger;
 
     constructor() {
+        const transport = new transports.DailyRotateFile({
+            filename: 'log/log-%DATE%.log',
+            datePattern: 'YYYY-MM-DD-HH',
+            zippedArchive: true,
+            maxSize: '20m',
+            maxFiles: '14d'
+        });
+
         this.winstonLogger = createLogger({
-            transports: [
-                new transports.File({ filename: 'log/combined.log' }),
-            ],
+            transports: [transport],
             // exceptionHandlers: [
             //     new transports.File({ filename: 'log/exceptions.log' })
             // ],
@@ -48,7 +55,7 @@ export class MyLogger implements LoggerService {
         );
         console.log(optionalParams);
         this.winstonLogger.log('error', optionalParams);
-        
+
     }
 
     /**
@@ -68,10 +75,26 @@ export class MyLogger implements LoggerService {
     /**
      * Write a 'debug' level log.
      */
-    debug(message: any, ...optionalParams: any[]) { }
+    debug(message: any, ...optionalParams: any[]) {
+        const timestamp = formatDate(new Date());
+        console.log(
+            `⚠️ ${colors.fg.yellow} debug`,
+            ` ${colors.fg.white} ${timestamp}`,
+            optionalParams,
+            `${colors.fg.magenta} ${message}`,
+        );
+    }
 
     /**
      * Write a 'verbose' level log.
      */
-    verbose(message: any, ...optionalParams: any[]) { }
+    verbose(message: any, ...optionalParams: any[]) {
+        const timestamp = formatDate(new Date());
+        console.log(
+            `⚠️ ${colors.fg.yellow} verbose`,
+            ` ${colors.fg.white} ${timestamp}`,
+            optionalParams,
+            `${colors.fg.magenta} ${message}`,
+        );
+    }
 }
