@@ -5,7 +5,10 @@ import { GetUser } from '../../utils/decorator/get-user.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
-@Controller('auth')
+@Controller({
+  path:'auth',
+  version: '1'
+})
 @UsePipes(ValidationPipe)
 export class AuthController {
 

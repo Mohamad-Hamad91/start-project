@@ -10,7 +10,7 @@ import { ObjectID } from 'mongodb';
 @Console()
 export class SeedService {
 
-    private logger = new Logger('SeedService');
+    private logger = new Logger(SeedService.name);
 
     constructor(@Inject(ResumeService) private usersService: ResumeService,) { }
 

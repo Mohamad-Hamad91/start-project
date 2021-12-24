@@ -25,13 +25,16 @@ import { Resume } from './entity/resume.entity';
 import { ResumeService } from './resume.service';
 
 
-@Controller('resume')
+@Controller({
+  version: '1',
+  path: 'resume'
+})
 @UsePipes(ValidationPipe)
 @UseGuards(AuthGuard(), RolesGuard)
 // @UseInterceptors(CacheInterceptor)
 export class ResumeController {
 
-  private logger = new Logger('ResumeController');
+  private logger = new Logger(ResumeController.name);
 
   constructor(private resumeService: ResumeService, private autocomplete: AutoCompleteService) { }
 

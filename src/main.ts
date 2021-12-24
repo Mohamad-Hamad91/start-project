@@ -5,6 +5,7 @@ import { ErrorsInterceptor } from './utils/logger/errors.interceptor';
 import { MyLogger } from './utils/logger/my-logger';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
+import { VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
 
@@ -19,6 +20,14 @@ async function bootstrap() {
 
   if (process.env.NODE_ENV !== 'production')
     app.enableCors();
+
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: 'v'
+  });
+
+  app.setGlobalPrefix('api');
 
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');

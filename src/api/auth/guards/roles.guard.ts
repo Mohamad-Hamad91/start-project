@@ -4,7 +4,7 @@ import { Reflector } from '@nestjs/core';
 @Injectable()
 export class RolesGuard implements CanActivate {
 
-    private logger = new Logger('RolesGuard');
+    private logger = new Logger(RolesGuard.name);
 
     constructor(private reflector: Reflector) { }
 
