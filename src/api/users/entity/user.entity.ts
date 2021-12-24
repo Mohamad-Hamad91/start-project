@@ -8,9 +8,12 @@ export class User extends BaseEntity {
     id: ObjectID;
 
     @Column({ unique: true })
-    email: string = '';
+    email: string;
 
     @Column()
-    password: string = '';
+    password: string;
+
+    @Column()
+    roles: string[];
 
 }

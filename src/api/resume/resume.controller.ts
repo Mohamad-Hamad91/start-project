@@ -1,5 +1,6 @@
 import {
   Body,
+  // CacheInterceptor,
   Controller,
   Delete,
   Get,
@@ -10,26 +11,43 @@ import {
   Post,
   Put,
   UseGuards,
+  // UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { AutoCompleteService } from 'src/utils/autocomplete/autocomplete-redis';
 import { GetUser } from 'src/utils/decorator/get-user.decorator';
-import { User } from '../users/entity/user.entity';
+import { Roles } from 'src/utils/decorator/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { ResumeDto } from './dto/resume.dto';
 import { Resume } from './entity/resume.entity';
 import { ResumeService } from './resume.service';
 
+
 @Controller('resume')
 @UsePipes(ValidationPipe)
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard(), RolesGuard)
+// @UseInterceptors(CacheInterceptor)
 export class ResumeController {
 
   private logger = new Logger('ResumeController');
 
-  constructor(private resumeService: ResumeService) { }
+  constructor(private resumeService: ResumeService, private autocomplete: AutoCompleteService) { }
+
+  @Get('/redis')
+  async getRedis() {
+    // const redis = await this.autocomplete.getClient();
+    const addRes = await this.autocomplete.add('Hello world!', 100);
+    this.logger.debug(addRes);
+    // const redis = await AutocompleteService.getClient();
+    let result = await this.autocomplete.get('He');
+    this.logger.debug(result);
+    return result;
+  }
 
   @Get()
+  @Roles('ADMIN')
   get() {
     // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     this.logger.verbose('getting resumes!');

@@ -1,8 +1,7 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { CacheInterceptor, CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './api/auth/auth.module';
-import { Resume } from './api/resume/entity/resume.entity';
 import { ResumeModule } from './api/resume/resume.module';
 import { SearchModule } from './api/search/search.module';
 import { HttpLoggerMiddleware } from './utils/logger/http-logger';
@@ -11,12 +10,17 @@ import { LoggerModule } from './utils/logger/logger.module';
 import { ConsoleModule } from 'nestjs-console';
 import { SeedService } from './console/seed.service';
 import { UsersModule } from './api/users/users.module';
-import { User } from './api/users/entity/user.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // no need to import into other modules
+    }),
+    CacheModule.register({
+      ttl: 5, // seconds
+      max: 10, // maximum number of items in cache
+      isGlobal: true,
     }),
     AuthModule,
     ResumeModule,
@@ -43,7 +47,11 @@ import { User } from './api/users/entity/user.entity';
     UsersModule
   ],
   controllers: [],
-  providers: [SeedService],
+  providers: [SeedService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

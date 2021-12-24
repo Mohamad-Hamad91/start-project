@@ -78,7 +78,7 @@ export class MyLogger implements LoggerService {
     debug(message: any, ...optionalParams: any[]) {
         const timestamp = formatDate(new Date());
         console.log(
-            `⚠️ ${colors.fg.yellow} debug`,
+            `⚠️ ${colors.fg.yellow} DEBUG`,
             ` ${colors.fg.white} ${timestamp}`,
             optionalParams,
             `${colors.fg.magenta} ${message}`,
@@ -91,7 +91,7 @@ export class MyLogger implements LoggerService {
     verbose(message: any, ...optionalParams: any[]) {
         const timestamp = formatDate(new Date());
         console.log(
-            `⚠️ ${colors.fg.yellow} verbose`,
+            `⚠️ ${colors.fg.yellow} VERBOSE`,
             ` ${colors.fg.white} ${timestamp}`,
             optionalParams,
             `${colors.fg.magenta} ${message}`,

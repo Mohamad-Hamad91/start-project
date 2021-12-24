@@ -14,7 +14,7 @@ async function bootstrap() {
   });
 
   app.use(helmet());
-  app.use(csurf());
+  // app.use(csurf());
 
 
   if (process.env.NODE_ENV !== 'production')

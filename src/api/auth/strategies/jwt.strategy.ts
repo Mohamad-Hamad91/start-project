@@ -18,8 +18,8 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any): Promise<any> {
-        const { id, email } = await this.validateJWTUser(payload?.email);
-        return { id, email };
+        const { id, email, roles } = await this.validateJWTUser(payload?.email);
+        return { id, email, roles };
     }
 
     async validateJWTUser(email: string) {
