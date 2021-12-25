@@ -10,18 +10,21 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   // UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AutoCompleteService } from 'src/utils/autocomplete/autocomplete-redis';
 import { GetUser } from 'src/utils/decorator/get-user.decorator';
 import { Roles } from 'src/utils/decorator/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ResumeDto } from './dto/resume.dto';
-import { Resume } from './entity/resume.entity';
+// import { Resume } from './entity/resume.entity';
 import { ResumeService } from './resume.service';
 
 
@@ -58,18 +61,19 @@ export class ResumeController {
   }
 
   @Get('/:id')
-  getOne(@Param('id') id: string): Promise<Resume> {
+  getOne(@Param('id') id: string) {
     // throw new Error('just kidding 😜');
     return this.resumeService.getOne(id);
   }
 
   @Post()
-  create(@GetUser() user, @Body() resume: ResumeDto): Promise<Resume> {
-    return this.resumeService.create(resume, user.id);
+  @UseInterceptors(FileInterceptor('photo'))
+  create(@UploadedFile() file: Express.Multer.File, @GetUser() user, @Body() resume: ResumeDto) {
+    return this.resumeService.create(resume, user._id, file);
   }
 
   @Put('/:id')
-  update(@Param('id') id: string, @Body() resume: ResumeDto): Promise<Resume> {
+  update(@Param('id') id: string, @Body() resume: ResumeDto) {
     return this.resumeService.update(id, resume);
   }
 

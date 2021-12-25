@@ -4,8 +4,8 @@ import { AppModule } from './app.module';
 import { ErrorsInterceptor } from './utils/logger/errors.interceptor';
 import { MyLogger } from './utils/logger/my-logger';
 import * as helmet from 'helmet';
-import * as csurf from 'csurf';
 import { VersioningType } from '@nestjs/common';
+import * as compression from 'compression';
 
 async function bootstrap() {
 
@@ -15,11 +15,12 @@ async function bootstrap() {
   });
 
   app.use(helmet());
-  // app.use(csurf());
 
 
   if (process.env.NODE_ENV !== 'production')
     app.enableCors();
+
+  app.use(compression());
 
 
   app.enableVersioning({
@@ -35,7 +36,7 @@ async function bootstrap() {
   // app.useLogger(myLogger);
   app.useGlobalInterceptors(app.get(ErrorsInterceptor));
   await app.listen(port);
-  myLogger.log(`server started and listening on port: ${port}`);
+  myLogger.log(`server started and listening on: ${await app.getUrl()}`);
 }
 bootstrap();
 

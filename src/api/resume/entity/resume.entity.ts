@@ -22,19 +22,19 @@ export class Resume extends BaseEntity {
   userId: ObjectID;
 
   @Column()
-  email: string = '';
+  email: string;
 
   @Column()
-  fName: string = '';
+  fName: string;
 
   @Column()
-  lName: string = '';
+  lName: string;
+
+  @ObjectIdColumn()
+  photo: ObjectID;
 
   @Column()
-  photo: string = '';
-
-  @Column()
-  phone: string = '';
+  phone: string;
 
   @Column()
   country: Country = Country.Syria;
@@ -43,7 +43,7 @@ export class Resume extends BaseEntity {
   city: City = City.UNSPECIFIED;
 
   @Column()
-  address: string = '';
+  address: string;
 
   @Column()
   birthDate: Date = new Date(1990, 1, 1);
@@ -64,10 +64,10 @@ export class Resume extends BaseEntity {
   shift: Shift = Shift.UNSPECIFIED;
 
   @Column()
-  summary: string = '';
+  summary: string;
 
   @Column()
-  hobbies: string = '';
+  hobbies: string;
 
   @Column()
   armyServiceStatus: ArmyServiceStatus = ArmyServiceStatus.Pending_For_Study;

@@ -17,10 +17,9 @@ export class RolesGuard implements CanActivate {
         return this.matchRoles(roles, user.roles);
     }
 
-    matchRoles(neededRoles, userRoles): boolean {
-        const isAllowed = role => !!userRoles[role];
+    matchRoles(neededRoles: string[], userRoles: string[]): boolean {
         for (let i = 0; i < neededRoles.length; i++) {
-            const allowed = isAllowed(neededRoles[i]);
+            const allowed = !!userRoles.find(r => r === neededRoles[i]);
             this.logger.debug(`is ${allowed ? '' : 'NOT'} allowed for ${neededRoles[i]} to...`);
             if (allowed) {
                 return true;
