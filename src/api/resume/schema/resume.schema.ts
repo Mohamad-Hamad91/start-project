@@ -10,14 +10,14 @@ import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 
 import { MyFile } from 'src/utils/file/file.schema';
-import { EmploymentHistory } from './employment-history.schema';
-import { Course } from './course.schema';
-import { Education } from './education.schema';
-import { Link } from './link.schema';
-import { UserSkill } from './user-skill.schema';
-import { UserLang } from './user-lang.schema';
-import { References } from './reference.schema';
-import { Project } from './project.schema';
+import { EmploymentHistory, EmploymentHistorySchema } from './employment-history.schema';
+import { Course, CourseSchema } from './course.schema';
+import { Education, EducationSchema } from './education.schema';
+import { Link, LinkSchema } from './link.schema';
+import { UserSkill, UserSkillSchema } from './user-skill.schema';
+import { UserLang, UserLangSchema } from './user-lang.schema';
+import { References, ReferencesSchema } from './reference.schema';
+import { Project, ProjectSchema } from './project.schema';
 import { User } from 'src/api/users/users.schema';
 
 export type ResumeDocument = Resume & Document;
@@ -79,28 +79,28 @@ export class Resume {
   @Prop()
   armyServiceStatus: ArmyServiceStatus = ArmyServiceStatus.Pending_For_Study;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'EmploymentHistory' }] })
+  @Prop({ type: [{ type: EmploymentHistorySchema }] })
   employmentHistory: EmploymentHistory[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }] })
+  @Prop({ type: [{ type: CourseSchema }] })
   courses: Course[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Education' }] })
+  @Prop({ type: [{ type: EducationSchema }] })
   education: Education[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Link' }] })
+  @Prop({ type: [{ type: LinkSchema }] })
   links: Link[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }] })
+  @Prop({ type: [{ type: ProjectSchema }] })
   projects: Project[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'References' }] })
+  @Prop({ type: [{ type: ReferencesSchema }] })
   references: References[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserLang' }] })
+  @Prop({ type: [{ type: UserLangSchema }] })
   languages: UserLang[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserSkill' }] })
+  @Prop({ type: [{ type: UserSkillSchema }] })
   skills: UserSkill[];
 }
 

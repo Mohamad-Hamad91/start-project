@@ -48,6 +48,7 @@ export class ResumeService {
       result = await temp.save({ session });
     });
     session.endSession();
+    result.user = result.user?._id;
     return result;
   }
 
