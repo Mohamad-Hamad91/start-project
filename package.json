@@ -21,6 +21,7 @@
     "console": "ts-node -r tsconfig-paths/register src/console/console.ts"
   },
   "dependencies": {
+    "@google-cloud/storage": "^5.16.1",
     "@nestjs-modules/mailer": "^1.3.17",
     "@nestjs/common": "^8.1.1",
     "@nestjs/config": "^1.1.5",

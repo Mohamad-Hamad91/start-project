@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
+import { pipeline } from 'stream/promises';
+import { Readable } from 'stream';
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { ObjectID, Repository } from 'typeorm';
 // import { MyFile } from './file.entity';
@@ -7,6 +9,7 @@ import { ObjectId, Model, ClientSession } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MyFile, FileDocument } from './file.schema';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { Storage } from '@google-cloud/storage';
 
 @Injectable()
 export class FileService {
@@ -41,6 +44,18 @@ export class FileService {
 
     async writeGCS(file: Express.Multer.File) {
 
+        const storage = new Storage({
+            projectId: 'my-project',
+            keyFile: 'my-project.json'
+        });
+
+        const bucket = storage.bucket('my-bucket');
+        const blob = bucket.file(file.originalname);
+        const blobStream = blob.createWriteStream({ resumable: true });
+        const stream = Readable.from(file.buffer);
+        //let pipe = stream.pipe(blobStream);
+        await pipeline(stream, blobStream);
+        return bucket.name + '/' + blob.name;
     }
 
 }
