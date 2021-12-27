@@ -63,9 +63,11 @@ export class ResumeDto {
   @IsIn(Enum2Array.transform(Nationality))
   nationality: Nationality = Nationality.Syrian;
 
+  @Type(() => Boolean)
   @IsBoolean()
   available: boolean = true;
 
+  @Type(() => Date)
   @IsDate()
   availableAt: Date = new Date();
 

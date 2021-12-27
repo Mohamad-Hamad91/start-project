@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
-import { pipeline } from 'stream/promises';
-import { Readable } from 'stream';
+// import { pipeline } from 'stream';
+import { Readable, pipeline } from 'stream';
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { ObjectID, Repository } from 'typeorm';
 // import { MyFile } from './file.entity';

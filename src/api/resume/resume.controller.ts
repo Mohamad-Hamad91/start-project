@@ -10,6 +10,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -22,6 +23,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { AutoCompleteService } from 'src/utils/autocomplete/autocomplete-redis';
 import { GetUser } from 'src/utils/decorator/get-user.decorator';
 import { Roles } from 'src/utils/decorator/roles.decorator';
+import { BaseQueryInputDto } from 'src/utils/generic/dto/base-query-input.dto';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ResumeDto } from './dto/resume.dto';
 // import { Resume } from './entity/resume.entity';
@@ -32,7 +34,6 @@ import { ResumeService } from './resume.service';
   version: '1',
   path: 'resume'
 })
-@UsePipes(ValidationPipe)
 @UseGuards(AuthGuard(), RolesGuard)
 // @UseInterceptors(CacheInterceptor)
 export class ResumeController {
@@ -54,14 +55,14 @@ export class ResumeController {
 
   @Get()
   @Roles('ADMIN')
-  get() {
+  async get(@Query() input: BaseQueryInputDto) {
     // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     this.logger.verbose('getting resumes!');
-    return this.resumeService.get();
+    return await this.resumeService.get(input);
   }
 
   @Get('/:id')
-  getOne(@Param('id') id: string) {
+  async getOne(@Param('id') id: string) {
     // throw new Error('just kidding 😜');
     return this.resumeService.getOne(id);
   }

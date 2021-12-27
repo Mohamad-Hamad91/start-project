@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { ErrorsInterceptor } from './utils/logger/errors.interceptor';
 import { MyLogger } from './utils/logger/my-logger';
 import * as helmet from 'helmet';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as compression from 'compression';
 
 async function bootstrap() {
@@ -35,6 +35,7 @@ async function bootstrap() {
   const myLogger = app.get(MyLogger);
   // app.useLogger(myLogger);
   app.useGlobalInterceptors(app.get(ErrorsInterceptor));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }),);
   await app.listen(port);
   myLogger.log(`server started and listening on: ${await app.getUrl()}`);
 }

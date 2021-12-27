@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Resume, ResumeDocument } from './schema/resume.schema';
 import { User } from '../users/users.schema';
 import { UsersService } from '../users/users.service';
+import { BaseQueryInputDto } from 'src/utils/generic/dto/base-query-input.dto';
 
 @Injectable()
 export class ResumeService {
@@ -18,8 +19,14 @@ export class ResumeService {
   constructor(@InjectModel(Resume.name) private resumeModel: Model<ResumeDocument>,
     private fileService: FileService, private userService: UsersService) { }
 
-  async get() {
-    return await this.resumeModel.find().exec();
+  async get(input: BaseQueryInputDto) {
+    const temp = input;
+    const result = await this.resumeModel.find()
+      // .sort(input.sortBy)
+      .limit(input.pageSize)
+      .skip(input.pageSize * (input.pageNumber - 1))
+      .exec();
+      return result;
   }
 
   async getOne(id: string): Promise<Resume> {
